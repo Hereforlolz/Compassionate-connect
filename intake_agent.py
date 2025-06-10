@@ -1,5 +1,7 @@
 # intake_agent.py
 import os
+import json
+from datetime import datetime, timedelta
 import google.generativeai as genai
 
 class IntakeQuestionnaireAgent:
@@ -127,6 +129,43 @@ class IntakeQuestionnaireAgent:
         💚 You've taken an important step!
         """)
         return {"type": "completed", "data": self.patient_data}
+
+    def detect_crisis(self, response):
+        crisis_terms = ['yes', 'y', 'suicide', 'kill', 'hurt', 'harm', 'die', 'end it', "depressed", "tired of it", "giving up", "give up"]
+        is_crisis = any(term in response.lower() for term in crisis_terms)
+        if is_crisis:
+            self.patient_data['crisis_detected'] = True
+            self.patient_data['crisis_timestamp'] = datetime.now().isoformat()
+            self.log_crisis_followup()
+        return is_crisis
+
+
+    def log_crisis_followup(self):
+        name = self.patient_data.get("name", "Unknown")
+        timestamp = datetime.now().isoformat()
+        message = (
+            f"Hi {name}, just checking in after yesterday. "
+            "How are you feeling today? Would you like to schedule a session?"
+        )
+        followup_entry = {
+            "name": name,
+            "timestamp": timestamp,
+            "message": message
+        }
+
+        log_path = "follow_up_log.json"
+        if os.path.exists(log_path):
+            with open(log_path, "r") as f:
+                data = json.load(f)
+        else:
+            data = []
+
+        data.append(followup_entry)
+
+        with open(log_path, "w") as f:
+            json.dump(data, f, indent=2)
+
+        print("📬 Crisis follow-up logged to follow_up_log.json.")
 
     def run(self):
         question = self.start_intake()
