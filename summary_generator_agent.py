@@ -1,5 +1,4 @@
 # summary_generator_agent.py
-from google.cloud import aiplatform
 import google.generativeai as genai
 
 class SummaryGeneratorAgent:
@@ -21,6 +20,7 @@ Format:
 - Mood and sleep info
 - Main concern
 - Any crisis risk
+- Any pattern you find in their response
 
 
 Here’s the intake data:

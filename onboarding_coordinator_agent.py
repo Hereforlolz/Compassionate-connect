@@ -1,57 +1,80 @@
-# onboarding_coordinator_agent.py
 from intake_agent import IntakeQuestionnaireAgent
 from crisis_response_agent import CrisisResponseAgent
-from data_persistence_agent import DataPersistenceAgent
 from summary_generator_agent import SummaryGeneratorAgent
-import google.generativeai as genai
+from data_persistence_agent import DataPersistenceAgent
+import time
 
 class OnboardingCoordinatorAgent:
-    def __init__(self, project_id, api_key):
-        # ✅ Configure the Gemini API
-        genai.configure(api_key=api_key)
-
-        self.project_id = project_id
+    def __init__(self, project_id):
         self.intake_agent = IntakeQuestionnaireAgent(project_id)
-        self.crisis_agent = CrisisResponseAgent(project_id)
+        self.crisis_agent = CrisisResponseAgent()
+        self.summary_agent = SummaryGeneratorAgent()
         self.storage_agent = DataPersistenceAgent(project_id)
-        self.summary_agent = SummaryGeneratorAgent(project_id)
 
     def run(self):
+        print("\n👋 Welcome to CompassionateConnect AI — Mental Health Intake System")
+        print("We’ll walk you through a few questions to help us support you.")
+        time.sleep(1)
+
         current_question = self.intake_agent.start_intake()
 
         while True:
-            if isinstance(current_question, dict):
-                if current_question.get('type') == 'completed':
-                    data = current_question['data']
+            if current_question.get('type') == 'completed':
+                data = current_question['data']
+
+                print("\n📋 Final Data:")
+                for k, v in data.items():
+                    print(f"  {k}: {v}")
+
+                confirmation = input("\n🛑 Is the information above correct? Type 'y' to confirm and save: ").strip().lower()
+                if confirmation == 'y':
                     self.storage_agent.save_data(data)
-
-                    # ✅ Generate summary
                     summary = self.summary_agent.generate_summary(data)
-                    print("\n📄 Summary for Care Team/ Clinician:")
-                    print(summary)
-                    break
+                    self.storage_agent.save_summary_to_json(summary)
+                    print("\n✅ Intake complete. Your information has been recorded.")
+                else:
+                    print("📝 Let's make some updates to your answers.")
+                    keys = list(data.keys())
+                    while True:
+                        print("\nWhich field would you like to update?")
+                        for i, key in enumerate(keys, 1):
+                            print(f"{i}. {key}: {data[key]}")
+                        choice = input("Type number to edit or 'done' to finish: ").strip().lower()
+                        if choice == 'done':
+                            break
+                        if choice.isdigit() and 1 <= int(choice) <= len(keys):
+                            field = keys[int(choice)-1]
+                            new_value = input(f"Enter new value for '{field}': ")
+                            data[field] = new_value
+                        else:
+                            print("❌ Invalid choice.")
 
-                elif current_question.get('type') == 'crisis':
-                    self.crisis_agent.handle_crisis(current_question['response'])
-                    break
-
-            user_response = input("\nYour answer: ").strip()
-
-            if user_response.lower() in ['quit', 'exit']:
-                print("Exiting...")
+                    # Show final version and ask again
+                    print("\nUpdated Final Data:")
+                    for k, v in data.items():
+                        print(f"  {k}: {v}")
+                    reconfirm = input("Type 'y' to confirm and save: ").strip().lower()
+                    if reconfirm == 'y':
+                        self.storage_agent.save_data(data)
+                        summary = self.summary_agent.generate_summary(data)
+                        self.storage_agent.save_summary_to_json(summary)
+                        print("\n✅ Updated intake saved.")
+                    else:
+                        print("❌ Intake not confirmed. Data was not saved.")
                 break
 
-            # ✅ Always pass full question dict to process_response
-            if isinstance(current_question, dict) and 'question' in current_question:
-                question_dict = current_question
-            else:
-                # fallback for non-dict inputs
-                question_dict = {"type": "text", "question": str(current_question), "id": "unknown", "required": False}
+            elif current_question.get('type') == 'crisis':
+                user_message = current_question['response']
+                self.crisis_agent.handle_crisis(user_message)
+                break
 
-            result = self.intake_agent.process_response(user_response, question_dict)
+            elif current_question.get('type') == 'clarification':
+                current_question = current_question['question']
 
-            # ⏭️ Handle clarification or move to next question
-            if isinstance(result, dict) and result.get('type') == 'clarification':
-                current_question = result.get('question')
             else:
-                current_question = result
+                response = input("\nYour response: ")
+                current_question = self.intake_agent.process_response(response, current_question)
+
+if __name__ == "__main__":
+    coordinator = OnboardingCoordinatorAgent(project_id="compassionate-connect-ai")
+    coordinator.run()

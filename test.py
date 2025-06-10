@@ -1,7 +1,7 @@
 # test.py
 from intake_agent import IntakeQuestionnaireAgent
 
-project_id = "your-gcp-project-id"  # Replace with your actual GCP project ID
+project_id = "compassionate-connect-ai"  # Replace with your actual GCP project ID
 
 agent = IntakeQuestionnaireAgent(project_id=project_id)
 question = agent.start_intake()
@@ -13,7 +13,7 @@ while True:
             print(f"  {k}: {v}")
         break
     elif question.get('type') == 'crisis':
-        print("\n🚨 CRISIS DETECTED — Immediate help needed!")
+        print("\n🚨 CRISIS DETECTED — Please reach out to 911 or your loved ones for Immediate help!")
         break
 
     user_input = input("\nYour answer: ").strip()
@@ -33,7 +33,7 @@ while True:
             print(f"  {k}: {v}")
         break
     elif result.get('type') == 'crisis':
-        print("\n🚨 CRISIS DETECTED — Immediate help needed!")
+        print("\n🚨 CRISIS DETECTED — Please reach out to 911 or your loved ones for Immediate help!")
         break
 
     question = result

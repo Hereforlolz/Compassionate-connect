@@ -3,6 +3,7 @@ import os
 import json
 from datetime import datetime, timedelta
 import google.generativeai as genai
+from google.cloud import firestore
 
 class IntakeQuestionnaireAgent:
     def __init__(self, project_id):
@@ -53,17 +54,17 @@ class IntakeQuestionnaireAgent:
             return {"type": "crisis", "response": response}
         if response.lower() in ['skip', 'pass', 'next']:
             if question.get('required', False):
-                print("\u26a0\ufe0f  This question is required. Let me help clarify it.")
+                print("This question is required. Let me help clarify it.")
                 return self.clarify_question(question)
             else:
-                print("\ud83d\udcdc Skipped.")
+                print("Skipped.")
                 return self.move_to_next_question()
         if self.validate_response(response, question):
             self.patient_data[question['id']] = response
-            print("\u2705 Thank you!")
+            print(" Thank you!")
             return self.move_to_next_question()
         else:
-            print("\ud83e\udd14 Let's clarify that question.")
+            print(" Let's clarify that question.")
             return self.clarify_question(question)
 
     def validate_response(self, response, question):
@@ -92,10 +93,10 @@ class IntakeQuestionnaireAgent:
         """
         try:
             clarification = self.model.generate_content(prompt).text
-            print(f"\ud83d\udca1 {clarification}")
+            print(f"{clarification}")
             return {"type": "clarification", "question": question}
         except:
-            print("\ud83d\udca1 " + self.get_simple_clarification(question))
+            print(" " + self.get_simple_clarification(question))
             return {"type": "clarification", "question": question}
 
     def get_simple_clarification(self, question):
@@ -153,6 +154,7 @@ class IntakeQuestionnaireAgent:
             "message": message
         }
 
+        # Save to local JSON
         log_path = "follow_up_log.json"
         if os.path.exists(log_path):
             with open(log_path, "r") as f:
@@ -165,7 +167,13 @@ class IntakeQuestionnaireAgent:
         with open(log_path, "w") as f:
             json.dump(data, f, indent=2)
 
-        print("📬 Crisis follow-up logged to follow_up_log.json.")
+        # 🔥 Also save to Firestore
+        try:
+            db = firestore.Client(project=self.project_id)
+            db.collection("crisis_followups").add(followup_entry)
+            print("📬 We are glad you are here")
+        except Exception as e:
+            print(f"⚠️ Error logging to Firestore: {e}")
 
     def run(self):
         question = self.start_intake()
@@ -176,7 +184,7 @@ class IntakeQuestionnaireAgent:
                     print(f"  {k}: {v}")
                 break
             elif question.get('type') == 'crisis':
-                print("\n CRISIS DETECTED — Immediate help needed!")
+                print("\n CRISIS DETECTED — Please reach out to 911 or your loved ones for Immediate help!")
                 break
             user_input = input("\nYour answer: ").strip()
             if user_input.lower() in ['quit', 'exit']:
@@ -186,7 +194,7 @@ class IntakeQuestionnaireAgent:
                 question = question['question']
             result = self.process_response(user_input, question)
             if result.get('type') == 'crisis':
-                print("\n CRISIS DETECTED — Immediate help needed!")
+                print("\n CRISIS DETECTED — Please reach out to 911 or your loved ones for Immediate help!")
                 break
             elif result.get('type') == 'completed':
                 print("\nFinal Data:")
