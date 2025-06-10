@@ -1,13 +1,11 @@
 # intake_agent.py
 import os
-from google.cloud import aiplatform
 import google.generativeai as genai
 
 class IntakeQuestionnaireAgent:
     def __init__(self, project_id):
         self.project_id = project_id
         self.location = "us-central1"
-        aiplatform.init(project=project_id, location=self.location)
         self.model = genai.GenerativeModel("gemini-1.5-flash")
         self.patient_data = {}
         self.questions = [
@@ -21,11 +19,12 @@ class IntakeQuestionnaireAgent:
             {"id": "crisis_check", "question": "Are you currently having thoughts of hurting yourself or others? (Yes/No)", "type": "yes_no", "required": True, "crisis_trigger": True}
         ]
         self.current_question_index = 0
-        print("📋 IntakeQuestionnaireAgent initialized!")
+        print("✓ IntakeQuestionnaireAgent initialized!")
+
 
     def start_intake(self):
         print("""
-        📋 Patient Intake Questionnaire
+        Patient Intake Questionnaire
 
         Welcome! 
         I'll now ask you some questions to help your care team understand your needs better.
@@ -52,17 +51,17 @@ class IntakeQuestionnaireAgent:
             return {"type": "crisis", "response": response}
         if response.lower() in ['skip', 'pass', 'next']:
             if question.get('required', False):
-                print("⚠️  This question is required. Let me help clarify it.")
+                print("\u26a0\ufe0f  This question is required. Let me help clarify it.")
                 return self.clarify_question(question)
             else:
-                print("📝 Skipped.")
+                print("\ud83d\udcdc Skipped.")
                 return self.move_to_next_question()
         if self.validate_response(response, question):
             self.patient_data[question['id']] = response
-            print("✅ Thank you!")
+            print("\u2705 Thank you!")
             return self.move_to_next_question()
         else:
-            print("🤔 Let's clarify that question.")
+            print("\ud83e\udd14 Let's clarify that question.")
             return self.clarify_question(question)
 
     def validate_response(self, response, question):
@@ -91,10 +90,10 @@ class IntakeQuestionnaireAgent:
         """
         try:
             clarification = self.model.generate_content(prompt).text
-            print(f"💡 {clarification}")
+            print(f"\ud83d\udca1 {clarification}")
             return {"type": "clarification", "question": question}
         except:
-            print("💡 " + self.get_simple_clarification(question))
+            print("\ud83d\udca1 " + self.get_simple_clarification(question))
             return {"type": "clarification", "question": question}
 
     def get_simple_clarification(self, question):
@@ -129,21 +128,16 @@ class IntakeQuestionnaireAgent:
         """)
         return {"type": "completed", "data": self.patient_data}
 
-
-def test_intake_agent():
-    print("Testing IntakeQuestionnaireAgent...")
-    project_id = "compassionate-connect-ai"
-    try:
-        agent = IntakeQuestionnaireAgent(project_id)
-        question = agent.start_intake()
+    def run(self):
+        question = self.start_intake()
         while True:
             if isinstance(question, dict) and question.get('type') == 'completed':
-                print("\n📋 Final Data:")
+                print("\n Final Data:")
                 for k, v in question['data'].items():
                     print(f"  {k}: {v}")
                 break
             elif question.get('type') == 'crisis':
-                print("\n🚨 CRISIS DETECTED — Immediate help needed!")
+                print("\n CRISIS DETECTED — Immediate help needed!")
                 break
             user_input = input("\nYour answer: ").strip()
             if user_input.lower() in ['quit', 'exit']:
@@ -151,18 +145,13 @@ def test_intake_agent():
                 break
             if question.get('type') == 'clarification':
                 question = question['question']
-            result = agent.process_response(user_input, question)
+            result = self.process_response(user_input, question)
             if result.get('type') == 'crisis':
-                print("\n🚨 CRISIS DETECTED — Immediate help needed!")
+                print("\n CRISIS DETECTED — Immediate help needed!")
                 break
             elif result.get('type') == 'completed':
-                print("\n📋 Final Data:")
+                print("\nFinal Data:")
                 for k, v in result['data'].items():
                     print(f"  {k}: {v}")
                 break
             question = result
-    except Exception as e:
-        print(f"❌ Error: {e}\nPlease check your Google Cloud project settings.")
-
-if __name__ == "__main__":
-    test_intake_agent()
