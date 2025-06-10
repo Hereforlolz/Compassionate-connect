@@ -7,8 +7,8 @@ import time
 class OnboardingCoordinatorAgent:
     def __init__(self, project_id):
         self.intake_agent = IntakeQuestionnaireAgent(project_id)
-        self.crisis_agent = CrisisResponseAgent()
-        self.summary_agent = SummaryGeneratorAgent()
+        self.crisis_agent = CrisisResponseAgent(project_id)
+        self.summary_agent = SummaryGeneratorAgent(project_id)
         self.storage_agent = DataPersistenceAgent(project_id)
 
     def run(self):

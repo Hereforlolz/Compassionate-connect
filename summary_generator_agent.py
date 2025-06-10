@@ -5,13 +5,8 @@ class SummaryGeneratorAgent:
     def __init__(self, project_id):
         self.project_id = project_id
         self.location = "us-central1"
-
-        # Ensure Vertex AI is initialized with the correct project/location
-        aiplatform.init(project=project_id, location=self.location)
-
-        # Use the right Gemini model
+    def __init__(self, project_id=None):  # optional if unused
         self.model = genai.GenerativeModel("gemini-1.5-flash")
-
     def generate_summary(self, data):
         prompt = f"""
 You are a clinical assistant AI. Summarize the patient's intake form clearly for a mental health clinician.
