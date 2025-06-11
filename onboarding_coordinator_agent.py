@@ -56,7 +56,8 @@ class OnboardingCoordinatorAgent:
                     reconfirm = input("Type 'y' to confirm and save: ").strip().lower()
                     if reconfirm == 'y':
                         self.storage_agent.save_data(data)
-                        coordinator.storage_agent.save_summary_with_data(summary, data)
+                        summary = self.summary_agent.generate_summary(data)
+                        self.storage_agent.save_summary_with_data(summary, data)
                         self.storage_agent.save_summary_to_json(summary)
                         print("\n✅ Updated intake saved.")
                     else:

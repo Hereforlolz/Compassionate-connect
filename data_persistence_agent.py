@@ -16,52 +16,36 @@ class DataPersistenceAgent:
 
     def save_summary_with_data(self, summary_text, patient_data):
         # Save to Firestore
+        client_name = patient_data.get("name", "Unnamed Client")
+        timestamp = patient_data.get("crisis_timestamp") or patient_data.get("timestamp") or datetime.now().isoformat()
+
+        summary_record = {
+            "summary": summary_text,
+            "timestamp": timestamp,
+            "crisis_detected": patient_data.get("crisis_detected", False),
+            "full_intake": patient_data
+         }
+         #save to firestore
         try:
-            entry = {
-                "summary": summary_text,
-                "patient_data": patient_data,
-                "timestamp": patient_data.get("crisis_timestamp") or patient_data.get("timestamp") or datetime.now().isoformat()
-            }
-            self.db.collection("summaries_with_data").add(entry)
+            self.db.collection("summaries_with_data").document(client_name).set(summary_record)
             print("✅ Summary and intake data saved to Firestore!")
         except Exception as e:
             print(f"❌ Error saving summary with data: {e}")
 
-        # Also save to local summaries.json
+    # 🔹 Save to local summaries.json (as a dict)
         try:
-            summary_entry = {
-                "summary": summary_text,
-                "timestamp": datetime.now().isoformat()
-            }
-
             file_path = "summaries.json"
-
             if os.path.exists(file_path):
                 with open(file_path, "r") as f:
-                    data = json.load(f)
+                    local_data = json.load(f)
             else:
-                data = []
+                local_data = {}
 
-            data.append(summary_entry)
+            local_data[client_name] = summary_record
 
             with open(file_path, "w") as f:
-                json.dump(data, f, indent=2)
+                json.dump(local_data, f, indent=2)
 
             print("🗃️ Summary also saved locally to summaries.json")
         except Exception as e:
             print(f"❌ Error saving to local JSON: {e}")
-
-    def save_crisis_profile(self, patient_data):
-        try:
-            entry = {
-                "name": patient_data.get("name"),
-                "age": patient_data.get("age"),
-                "main_concern": patient_data.get("main_concern"),
-                "mood": patient_data.get("current_mood"),
-                "timestamp": patient_data.get("crisis_timestamp", datetime.now().isoformat()),
-                "crisis_flagged": True
-            }
-            self.db.collection("crisis_profiles").add(entry)
-            print("🚨 Crisis profile saved to Firestore.")
-        except Exception as e:
-            print(f"❌ Error saving crisis profile: {e}")

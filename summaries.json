@@ -1,14 +1,29 @@
 {
-    "John Doe": {
-        "summary": "- **Name and age:** John Doe, 29 years old\n...",
-        "timestamp": "2025-06-10T18:08:00.269731",
-        "insights": "Based on the limited information provided (\"Name and age: John Doe, 29 years old\"), it is impossible to identify specific areas of concern or recommend appropriate therapy approaches.  To provide helpful suggestions, more information about John Doe's presenting issues, symptoms, and history is needed.\n\n\nHowever, given the lack of detail,  *possible* areas of concern that could be explored with further information include:  anxiety, depression, stress, adjustment difficulties, and burnout.  It's also important to consider the possibility of trauma, though this cannot be assumed without more information.\n\nPotential therapy approaches that *might* be considered, depending on a full assessment, include Cognitive Behavioral Therapy (CBT), Acceptance and Commitment Therapy (ACT), mindfulness-based therapies, and trauma-informed approaches.  Other modalities could also prove beneficial.\n\n\n**Disclaimer:**  The above suggestions are purely speculative and should not be interpreted as a diagnosis or treatment plan.  A comprehensive clinical assessment is required before any definitive conclusions can be made about John Doe's mental health status and appropriate treatment.\n",
-        "insights_generated_at": "2025-06-11T08:14:37.608615"
-    },
-    "Jane Smith": {
-        "summary": "- **Name and age:** Jane Smith, 34 years old\n...",
-        "timestamp": "2025-06-10T18:15:43.000000",
-        "insights": "Based on the limited information provided, here are some possible considerations for Jane Smith, 34 years old:\n\n**1. Possible Areas of Concern:**\n\n* **Stress and Anxiety:**  The absence of information doesn't rule out general stress or anxiety as potential contributing factors to Jane's presentation.\n* **Burnout:**  Depending on Jane's life circumstances (work, family, etc.), burnout could be a possibility. Further information is needed.\n* **Depression:**  Given the limited information, depression cannot be ruled out, but further assessment is essential.\n* **Trauma:**  Without further information, it's impossible to determine if trauma might be a factor.\n\n\n**2. Potential Therapy Approaches:**\n\nGiven the broad range of possibilities above, several therapeutic approaches *could* be helpful depending on a full assessment:\n\n* **Cognitive Behavioral Therapy (CBT):**  CBT can be effective for managing anxiety, stress, and depression by addressing negative thought patterns and behaviors.\n* **Acceptance and Commitment Therapy (ACT):** ACT could be beneficial in helping Jane accept difficult emotions and focus on valued actions.\n* **Mindfulness-Based Therapies:**  Mindfulness practices can be helpful in managing stress and improving emotional regulation.\n* **Trauma-Informed Therapy:** If trauma is identified as a contributing factor, a trauma-informed approach would be necessary.  This could involve various techniques adapted to the individual's needs.\n\n\n**3. Disclaimer:**\n\nIt is crucial to understand that these are merely potential areas of concern and suggested therapy approaches based on extremely limited information.  They are not diagnoses, and a comprehensive assessment by a qualified mental health professional is necessary to determine an accurate diagnosis and create an appropriate treatment plan.  This information is for informational purposes only and should not be substituted for professional clinical judgment.\n",
-        "insights_generated_at": "2025-06-11T08:14:40.711647"
+  "John Doe": {
+    "summary": "- **Name and age:** John Doe, 29 years old\n- **Mood and sleep info:** Reports current mood as a 4 (on an unspecified scale, needs clarification), and poor sleep pattern.\n- **Main concern:** Feeling overwhelmed and hopeless.\n- **Any crisis risk:** No immediate crisis reported.\n- **Any pattern in response:**  No discernible patterns detected from the limited provided data.  Further information is needed for a thorough assessment.\n",
+    "timestamp": "2025-06-11T11:49:52.810573",
+    "crisis_detected": false,
+    "full_intake": {
+      "name": "John Doe",
+      "age": "29",
+      "phone": "555-123-4567",
+      "emergency_contact": "Jane Doe, 555-987-6543",
+      "current_mood": "4",
+      "sleep_pattern": "poor",
+      "main_concern": "I\u2019ve been feeling extremely overwhelmed and hopeless lately",
+      "crisis_check": "no"
     }
+  },
+  "Jane Smith": {
+    "summary": "- **Name and age:** Jane Smith, 34 years old\n...",
+    "timestamp": "2025-06-10T18:15:43.000000",
+    "insights": "Based on the limited information provided, here are some possible considerations for Jane Smith, 34 years old:\n\n**1. Possible Areas of Concern:**\n\n* **Stress and Anxiety:**  The absence of information doesn't rule out general stress or anxiety as potential contributing factors to Jane's presentation.\n* **Burnout:**  Depending on Jane's life circumstances (work, family, etc.), burnout could be a possibility. Further information is needed.\n* **Depression:**  Given the limited information, depression cannot be ruled out, but further assessment is essential.\n* **Trauma:**  Without further information, it's impossible to determine if trauma might be a factor.\n\n\n**2. Potential Therapy Approaches:**\n\nGiven the broad range of possibilities above, several therapeutic approaches *could* be helpful depending on a full assessment:\n\n* **Cognitive Behavioral Therapy (CBT):**  CBT can be effective for managing anxiety, stress, and depression by addressing negative thought patterns and behaviors.\n* **Acceptance and Commitment Therapy (ACT):** ACT could be beneficial in helping Jane accept difficult emotions and focus on valued actions.\n* **Mindfulness-Based Therapies:**  Mindfulness practices can be helpful in managing stress and improving emotional regulation.\n* **Trauma-Informed Therapy:** If trauma is identified as a contributing factor, a trauma-informed approach would be necessary.  This could involve various techniques adapted to the individual's needs.\n\n\n**3. Disclaimer:**\n\nIt is crucial to understand that these are merely potential areas of concern and suggested therapy approaches based on extremely limited information.  They are not diagnoses, and a comprehensive assessment by a qualified mental health professional is necessary to determine an accurate diagnosis and create an appropriate treatment plan.  This information is for informational purposes only and should not be substituted for professional clinical judgment.\n",
+    "insights_generated_at": "2025-06-11T08:14:40.711647",
+    "crisis_detected": false,
+    "full_intake": {
+      "name": "Jane Smith",
+      "concern": "Unknown",
+      "timestamp": "2025-06-10T18:15:43.000000"
+    }
+  }
 }
