@@ -30,7 +30,7 @@ class OnboardingCoordinatorAgent:
                 if confirmation == 'y':
                     self.storage_agent.save_data(data)
                     summary = self.summary_agent.generate_summary(data)
-                    self.storage_agent.save_summary_to_json(summary)
+                    self.storage_agent.save_summary_with_data(summary, data)
                     print("\n✅ Intake complete. Your information has been recorded.")
                 else:
                     print("📝 Let's make some updates to your answers.")
@@ -56,7 +56,7 @@ class OnboardingCoordinatorAgent:
                     reconfirm = input("Type 'y' to confirm and save: ").strip().lower()
                     if reconfirm == 'y':
                         self.storage_agent.save_data(data)
-                        summary = self.summary_agent.generate_summary(data)
+                        coordinator.storage_agent.save_summary_with_data(summary, data)
                         self.storage_agent.save_summary_to_json(summary)
                         print("\n✅ Updated intake saved.")
                     else:
@@ -66,6 +66,7 @@ class OnboardingCoordinatorAgent:
             elif current_question.get('type') == 'crisis':
                 user_message = current_question['response']
                 self.crisis_agent.handle_crisis(user_message)
+                self.storage_agent.save_crisis_profile(self.intake_agent.patient_data)  
                 break
 
             elif current_question.get('type') == 'clarification':

@@ -18,5 +18,15 @@
     "name": "Agatha Christie",
     "timestamp": "2025-06-10T16:57:05.439463",
     "message": "Hi Agatha Christie, just checking in after yesterday. How are you feeling today? Would you like to schedule a session?"
+  },
+  {
+    "name": "John Doe",
+    "timestamp": "2025-06-10T17:34:36.362933",
+    "message": "Hi John Doe, just checking in after yesterday. How are you feeling today? Would you like to schedule a session?"
+  },
+  {
+    "name": "John Doe",
+    "timestamp": "2025-06-10T17:55:44.169805",
+    "message": "Hi John Doe, just checking in after yesterday. How are you feeling today? Would you like to schedule a session?"
   }
 ]

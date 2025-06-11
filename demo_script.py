@@ -12,11 +12,11 @@ demo_responses = [
     "4",                   # mood
     "poor",                # sleep
     "I’ve been feeling extremely overwhelmed and hopeless lately",  # concern
-    "yes"                  # triggers crisis
+    "no"                  # triggers crisis
 ]
 
 def run_demo():
-    print("\n🎬 Starting Demo: CompassionateConnect AI\n")
+    print("\n🎬 Starting Demo: CompassionateConnect AI")
     coordinator = OnboardingCoordinatorAgent(project_id="compassionate-connect-ai")
 
     current_question = coordinator.intake_agent.start_intake()
@@ -37,8 +37,8 @@ def run_demo():
             data = result['data']
             coordinator.storage_agent.save_data(data)
             summary = coordinator.summary_agent.generate_summary(data)
-            coordinator.storage_agent.save_summary_to_json(summary)
-            print("\n🩺 Summary stored. Ready for therapist dashboard.")
+            coordinator.storage_agent.save_summary_with_data(summary, data)
+            print("\n🩺 Thank you. The office will reach out to you.")
             return
         current_question = result
 

@@ -15,19 +15,21 @@ class DataPersistenceAgent:
             print(f"❌ Error saving to Firestore: {e}")
 
     def save_summary_with_data(self, summary_text, patient_data):
-        # Save to Firestore
+        # ✅ Save to Firestore
         try:
             entry = {
                 "summary": summary_text,
                 "patient_data": patient_data,
-                "timestamp": patient_data.get("crisis_timestamp") or patient_data.get("timestamp") or datetime.now().isoformat()
+                "timestamp": patient_data.get("crisis_timestamp") or
+                             patient_data.get("timestamp") or
+                             datetime.now().isoformat()
             }
             self.db.collection("summaries_with_data").add(entry)
             print("✅ Summary and intake data saved to Firestore!")
         except Exception as e:
-            print(f"❌ Error saving summary with data: {e}")
+            print(f"❌ Error saving summary with data to Firestore: {e}")
 
-        # Also save to local summaries.json
+        # ✅ Also save to local JSON
         try:
             summary_entry = {
                 "summary": summary_text,
@@ -36,20 +38,20 @@ class DataPersistenceAgent:
 
             file_path = "summaries.json"
 
+            # Use a separate variable to avoid overwriting input `patient_data`
+            local_summaries = []
             if os.path.exists(file_path):
                 with open(file_path, "r") as f:
-                    data = json.load(f)
-            else:
-                data = []
+                    local_summaries = json.load(f)
 
-            data.append(summary_entry)
+            local_summaries.append(summary_entry)
 
             with open(file_path, "w") as f:
-                json.dump(data, f, indent=2)
+                json.dump(local_summaries, f, indent=2)
 
             print("🗃️ Summary also saved locally to summaries.json")
         except Exception as e:
-            print(f"❌ Error saving to local JSON: {e}")
+            print(f"❌ Error saving summary to local JSON: {e}")
 
     def save_crisis_profile(self, patient_data):
         try:

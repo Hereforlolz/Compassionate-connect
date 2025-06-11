@@ -17,4 +17,4 @@ class CrisisResponseAgent:
             print(f"\n💬 AI Response:\n{response.text}")
             print("\n📟 (Simulated alert sent to clinic staff.)")
         except Exception:
-            print("⚠️ Crisis detected. Please call 988 or go to the nearest emergency room.")
+            print("⚠️ Crisis detected. Please call 911 or go to the nearest emergency room.")
