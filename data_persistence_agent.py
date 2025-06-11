@@ -49,3 +49,17 @@ class DataPersistenceAgent:
             print("🗃️ Summary also saved locally to summaries.json")
         except Exception as e:
             print(f"❌ Error saving to local JSON: {e}")
+    def save_crisis_profile(self, patient_data):
+        try:
+            entry = {
+                "name": patient_data.get("name"),
+                "age": patient_data.get("age"),
+                "main_concern": patient_data.get("main_concern"),
+                "mood": patient_data.get("current_mood"),
+                "timestamp": patient_data.get("crisis_timestamp", datetime.now().isoformat()),
+                "crisis_flagged": True
+            }
+            self.db.collection("crisis_profiles").add(entry)
+            print("🚨 Crisis profile saved to Firestore.")
+        except Exception as e:
+            print(f"❌ Error saving crisis profile: {e}")
