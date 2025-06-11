@@ -27,32 +27,8 @@ It simulates a human-like intake assistant that:
 
 ## 🤖 Multi-Agent Architecture
 
-```mermaid
-flowchart TD
-    A[🧍 User] --> B(OnboardingCoordinatorAgent)
-    
-    subgraph Intake Flow
-        B --> C[IntakeQuestionnaireAgent]
-        C --> D{Response Type}
-        D -->|Clarification| C
-        D -->|Valid Answer| E[Store in patient_data]
-        D -->|Crisis Detected| F[CrisisResponseAgent]
-    end
+![CompassionateConnect AI Architecture](CompassionateConnect_architecture.svg)
 
-    subgraph Post-Intake
-        E --> G[SummaryGeneratorAgent]
-        G --> H[InsightAgent]
-        H --> I[DataPersistenceAgent]
-    end
-
-    F --> I
-    F --> J[Follow-up Log (Firestore + JSON)]
-
-    I --> K[Firestore: summaries_with_data]
-    I --> L[Firestore: crisis_profiles]
-    I --> M[Local JSON: summaries.json]
-
----
 
 ## 🔍 Agents Overview
 
