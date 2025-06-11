@@ -1,4 +1,3 @@
-# intake_agent.py
 import os
 import json
 from datetime import datetime, timedelta
@@ -16,14 +15,13 @@ class IntakeQuestionnaireAgent:
             {"id": "age", "question": "What is your age?", "type": "number", "required": True},
             {"id": "phone", "question": "What is your phone number?", "type": "text", "required": True},
             {"id": "emergency_contact", "question": "Who should we contact in case of emergency? (Name and phone number)", "type": "text", "required": True},
-            {"id": "current_mood", "question": "On a scale of 1-10, how would you rate your mood today? (1 = very low, 10 = excellent)", "type": "scale", "required": True},
+            {"id": "current_mood", "question": "On a scale of 1-10, how would you rate your mood today?", "type": "scale", "required": True},
             {"id": "sleep_pattern", "question": "How has your sleep been lately? (Good/Fair/Poor)", "type": "choice", "required": True},
             {"id": "main_concern", "question": "What brings you to seek mental health support today?", "type": "text", "required": True},
             {"id": "crisis_check", "question": "Are you currently having thoughts of hurting yourself or others? (Yes/No)", "type": "yes_no", "required": True, "crisis_trigger": True}
         ]
         self.current_question_index = 0
         print("✓ IntakeQuestionnaireAgent initialized!")
-
 
     def start_intake(self):
         print("""
@@ -50,8 +48,11 @@ class IntakeQuestionnaireAgent:
 
     def process_response(self, response, question):
         response = response.strip()
+        self.patient_data[question['id']] = response  # 🔑 Store before checking crisis
+
         if question.get('crisis_trigger', False) and self.detect_crisis(response):
             return {"type": "crisis", "response": response}
+
         if response.lower() in ['skip', 'pass', 'next']:
             if question.get('required', False):
                 print("This question is required. Let me help clarify it.")
@@ -59,8 +60,8 @@ class IntakeQuestionnaireAgent:
             else:
                 print("Skipped.")
                 return self.move_to_next_question()
+
         if self.validate_response(response, question):
-            self.patient_data[question['id']] = response
             print(" Thank you!")
             return self.move_to_next_question()
         else:
@@ -113,8 +114,60 @@ class IntakeQuestionnaireAgent:
         return fallback.get(question['id'], "Please answer as best you can.")
 
     def detect_crisis(self, response):
-        crisis_terms = ['yes', 'y', 'suicide', 'kill', 'hurt', 'harm', 'die', 'end it']
-        return any(term in response.lower() for term in crisis_terms)
+        crisis_terms = ['yes', 'y', 'suicide', 'kill', 'hurt', 'harm', 'die', 'end it', "depressed", "tired of it", "giving up", "give up"]
+        is_crisis = any(term in response.lower() for term in crisis_terms)
+        if is_crisis:
+            print("🫂")
+            self.patient_data['crisis_detected'] = True
+            self.patient_data['crisis_timestamp'] = datetime.now().isoformat()
+            self.log_crisis_flag()
+            self.log_crisis_followup()
+        return is_crisis
+
+    def log_crisis_flag(self):
+        try:
+            db = firestore.Client(project=self.project_id)
+            crisis_entry = {
+                "user_id": self.patient_data.get("phone", "unknown"),
+                "name": self.patient_data.get("name", "Unknown"),
+                "timestamp": datetime.utcnow()
+            }
+            db.collection("crisis_flags").add(crisis_entry)
+            print(f"🚨 Crisis flag logged: {crisis_entry}")
+        except Exception as e:
+            print(f"⚠️ Failed to log crisis flag: {e}")
+
+    def log_crisis_followup(self):
+        name = self.patient_data.get("name", "Unknown")
+        timestamp = datetime.now().isoformat()
+        message = (
+            f"Hi {name}, just checking in after yesterday. "
+            "How are you feeling today? Would you like to schedule a session?"
+        )
+        followup_entry = {
+            "name": name,
+            "timestamp": timestamp,
+            "message": message
+        }
+
+        log_path = "follow_up_log.json"
+        if os.path.exists(log_path):
+            with open(log_path, "r") as f:
+                data = json.load(f)
+        else:
+            data = []
+
+        data.append(followup_entry)
+
+        with open(log_path, "w") as f:
+            json.dump(data, f, indent=2)
+
+        try:
+            db = firestore.Client(project=self.project_id)
+            db.collection("crisis_followups").add(followup_entry)
+            print("📬 Follow-up logged successfully.")
+        except Exception as e:
+            print(f"⚠️ Error logging follow-up to Firestore: {e}")
 
     def move_to_next_question(self):
         self.current_question_index += 1
@@ -131,50 +184,6 @@ class IntakeQuestionnaireAgent:
         """)
         return {"type": "completed", "data": self.patient_data}
 
-    def detect_crisis(self, response):
-        crisis_terms = ['yes', 'y', 'suicide', 'kill', 'hurt', 'harm', 'die', 'end it', "depressed", "tired of it", "giving up", "give up"]
-        is_crisis = any(term in response.lower() for term in crisis_terms)
-        if is_crisis:
-            self.patient_data['crisis_detected'] = True
-            self.patient_data['crisis_timestamp'] = datetime.now().isoformat()
-            self.log_crisis_followup()
-        return is_crisis
-
-
-    def log_crisis_followup(self):
-        name = self.patient_data.get("name", "Unknown")
-        timestamp = datetime.now().isoformat()
-        message = (
-            f"Hi {name}, just checking in after yesterday. "
-            "How are you feeling today? Would you like to schedule a session?"
-        )
-        followup_entry = {
-            "name": name,
-            "timestamp": timestamp,
-            "message": message
-        }
-
-        # Save to local JSON
-        log_path = "follow_up_log.json"
-        if os.path.exists(log_path):
-            with open(log_path, "r") as f:
-                data = json.load(f)
-        else:
-            data = []
-
-        data.append(followup_entry)
-
-        with open(log_path, "w") as f:
-            json.dump(data, f, indent=2)
-
-        # 🔥 Also save to Firestore
-        try:
-            db = firestore.Client(project=self.project_id)
-            db.collection("crisis_followups").add(followup_entry)
-            print("📬 We are glad you are here")
-        except Exception as e:
-            print(f"⚠️ Error logging to Firestore: {e}")
-
     def run(self):
         question = self.start_intake()
         while True:
@@ -185,6 +194,7 @@ class IntakeQuestionnaireAgent:
                 break
             elif question.get('type') == 'crisis':
                 print("\n CRISIS DETECTED — Please reach out to 911 or your loved ones for Immediate help!")
+                print("✅ Crisis response handled and logged.")
                 break
             user_input = input("\nYour answer: ").strip()
             if user_input.lower() in ['quit', 'exit']:
@@ -194,7 +204,7 @@ class IntakeQuestionnaireAgent:
                 question = question['question']
             result = self.process_response(user_input, question)
             if result.get('type') == 'crisis':
-                print("\n CRISIS DETECTED — Please reach out to 911 or your loved ones for Immediate help!")
+                print("\n 🫂🫂Sorry you feel this way. — Please reach out to 911 or your loved ones for Immediate help!")
                 break
             elif result.get('type') == 'completed':
                 print("\nFinal Data:")

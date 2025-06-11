@@ -27,7 +27,7 @@ It simulates a human-like intake assistant that:
 
 ## 🤖 Multi-Agent Architecture
 
-![CompassionateConnect AI Architecture](CompassionateConnect_architecture.svg)
+![CompassionateConnect AI Architecture](architecture.png)
 
 
 ## 🔍 Agents Overview

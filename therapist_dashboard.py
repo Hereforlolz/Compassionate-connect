@@ -1,69 +1,52 @@
-from google.cloud import firestore
-from datetime import datetime
+# therapist_dashboard.py
+
 import json
 import os
+from insight_agent import InsightAgent
 
-class DataPersistenceAgent:
-    def __init__(self, project_id):
-        self.db = firestore.Client(project=project_id)
+def load_summaries(file_path="summaries.json"):
+    print("📁 Loading summaries from:", file_path)
 
-    def save_data(self, data):
-        try:
-            self.db.collection("intake_forms").add(data)
-            print("✅ Data saved to Firestore!")
-        except Exception as e:
-            print(f"❌ Error saving to Firestore: {e}")
+    if not os.path.exists(file_path):
+        print("❌ summaries.json file not found.")
+        return {}
 
-    def save_summary_with_data(self, summary_text, patient_data):
-        # ✅ Save to Firestore
-        try:
-            entry = {
-                "summary": summary_text,
-                "patient_data": patient_data,
-                "timestamp": patient_data.get("crisis_timestamp") or
-                             patient_data.get("timestamp") or
-                             datetime.now().isoformat()
-            }
-            self.db.collection("summaries_with_data").add(entry)
-            print("✅ Summary and intake data saved to Firestore!")
-        except Exception as e:
-            print(f"❌ Error saving summary with data to Firestore: {e}")
+    try:
+        with open(file_path, "r") as f:
+            data = json.load(f)
+            print(f"✅ Loaded {len(data)} entries.")
+            return data
+    except json.JSONDecodeError as e:
+        print(f"❌ JSON decode error: {e}")
+        return {}
 
-        # ✅ Also save to local JSON
-        try:
-            summary_entry = {
-                "summary": summary_text,
-                "timestamp": datetime.now().isoformat()
-            }
+def display_therapist_dashboard():
+    print("\n👩‍⚕️ THERAPIST DASHBOARD - CompassionateConnect AI\n" + "-" * 60)
 
-            file_path = "summaries.json"
+    summaries = load_summaries()
+    if not summaries:
+        print("⚠️ No summaries found. Check JSON file format.")
+        return
 
-            # Use a separate variable to avoid overwriting input `patient_data`
-            local_summaries = []
-            if os.path.exists(file_path):
-                with open(file_path, "r") as f:
-                    local_summaries = json.load(f)
+    insight_agent = InsightAgent()
 
-            local_summaries.append(summary_entry)
+    for name, data in summaries.items():
+        print(f"\n🧾 Client: {name}")
 
-            with open(file_path, "w") as f:
-                json.dump(local_summaries, f, indent=2)
+        # Show timestamp
+        timestamp = data.get("timestamp", "No timestamp available.")
+        print(f"⏰ Submitted: {timestamp}")
 
-            print("🗃️ Summary also saved locally to summaries.json")
-        except Exception as e:
-            print(f"❌ Error saving summary to local JSON: {e}")
+        # Show summary
+        summary_text = data.get("summary", "No summary provided.")
+        print(f"\n📝 Summary:\n{summary_text}")
 
-    def save_crisis_profile(self, patient_data):
-        try:
-            entry = {
-                "name": patient_data.get("name"),
-                "age": patient_data.get("age"),
-                "main_concern": patient_data.get("main_concern"),
-                "mood": patient_data.get("current_mood"),
-                "timestamp": patient_data.get("crisis_timestamp", datetime.now().isoformat()),
-                "crisis_flagged": True
-            }
-            self.db.collection("crisis_profiles").add(entry)
-            print("🚨 Crisis profile saved to Firestore.")
-        except Exception as e:
-            print(f"❌ Error saving crisis profile: {e}")
+        # Generate insights
+        print("\n💡 Generating Insights with Gemini...")
+        insights = insight_agent.generate_insights(summary_text)
+        print(f"\n🔍 Insights:\n{insights}")
+        print("\n" + "-" * 60)
+
+if __name__ == "__main__":
+    print("👀 Starting Therapist Dashboard...")
+    display_therapist_dashboard()

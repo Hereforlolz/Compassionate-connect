@@ -1,6 +1,7 @@
 # insight_agent.py
 
 import google.generativeai as genai
+genai.configure(api_key="YOUR_KEY")  # Replace with your actual key
 
 class InsightAgent:
     def __init__(self):
