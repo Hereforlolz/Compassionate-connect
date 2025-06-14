@@ -75,7 +75,7 @@ You’ll experience a fully guided, AI-powered intake simulation — with clarif
 
 📺 Demo Video
 
-👉 [Watch demo (2:45)](YOUR_DEMO_LINK_HERE)
+👉 [Watch demo (2:12)](https://www.youtube.com/watch?v=exSmOzVHLIg&ab_channel=SreenidhiVedartham%28Needhi%29)
 
 ---
 
@@ -100,7 +100,7 @@ The dashboard:
 
 📘 Notion Documentation
 
-👉 [View full Notion project book](YOUR_NOTION_LINK_HERE)
+👉 [View full Notion project book](https://www.notion.so/CompassionateConnect-AI-20eb2f6a587d809194b4dfadbf393ebb?source=copy_link)
 
 ---
 

@@ -1,7 +1,7 @@
 {
   "John Doe": {
-    "summary": "- **Name and age:** John Doe, 29 years old\n- **Mood and sleep info:** Reports current mood as a 4 (on an unspecified scale, needs clarification), and poor sleep pattern.\n- **Main concern:** Feeling overwhelmed and hopeless.\n- **Any crisis risk:** No immediate crisis reported.\n- **Any pattern in response:**  No discernible patterns detected from the limited provided data.  Further information is needed for a thorough assessment.\n",
-    "timestamp": "2025-06-11T11:49:52.810573",
+    "summary": "- **Name and age:** John Doe, 29 years old\n- **Mood and sleep info:** Reports current mood as a 4 (on an unspecified scale, needs clarification), and poor sleep pattern.\n- **Main concern:** Feeling overwhelmed and hopeless.\n- **Any crisis risk:** No immediate crisis reported.\n- **Any pattern in response:** No significant patterns detected beyond the expressed feelings of hopelessness and overwhelm.  Further information is needed to establish a diagnostic pattern.\n",
+    "timestamp": "2025-06-11T15:20:17.418852",
     "crisis_detected": false,
     "full_intake": {
       "name": "John Doe",
@@ -25,5 +25,56 @@
       "concern": "Unknown",
       "timestamp": "2025-06-10T18:15:43.000000"
     }
+  },
+  "Jane maxwell": {
+    "summary": "- **Name and age:** Jane Maxwell, 5 years old\n- **Mood and sleep info:**  Reports a mood level of 6 (on an unspecified scale, needs clarification), sleep pattern described as \"fair.\"\n- **Main concern:** Shyness.\n- **Any crisis risk:** No.\n- **Any pattern in their response:**  The young age of the patient is significant and suggests the \"shyness\" concern may manifest differently than in an adult. Further information is needed to understand the nature and severity of the shyness and its impact on her daily life.  The numerical mood rating needs context (e.g., scale used).\n",
+    "timestamp": "2025-06-11T13:19:23.324791",
+    "crisis_detected": false,
+    "full_intake": {
+      "name": "Jane maxwell",
+      "age": "5",
+      "phone": "234-234-1234",
+      "emergency_contact": "Mrs maxwell 765-345-1235",
+      "current_mood": "6",
+      "sleep_pattern": "Fair",
+      "main_concern": "I want to overcome shyness",
+      "crisis_check": "no"
+    },
+    "insights": "1. **Possible Areas of Concern:**\n\n* **Social Anxiety:**  Shyness in a five-year-old could be a manifestation of social anxiety, potentially impacting her ability to interact with peers and engage in age-appropriate social activities.\n* **Selective Mutism:** While not explicitly stated, the shyness warrants consideration of selective mutism, particularly given her age. This would require further assessment.\n* **Developmental Delay (Social-Emotional):**  Further assessment is needed to determine if her shyness falls within the typical range of development for a five-year-old, or if it represents a potential social-emotional delay.\n* **Underlying Trauma:** While not mentioned, a history of trauma (even minor events for a child of this age) could be contributing to her shyness. This warrants further exploration.\n\n2. **Potential Therapy Approaches:**\n\n* **Play Therapy:**  Given Jane's age, play therapy would be a highly suitable approach to understand and address her shyness. This allows her to express herself through play rather than verbal communication.\n* **Parent Training/Education:**  Involving and educating parents about strategies to support Jane's social development is crucial.  This might involve guidance on encouraging social interaction in a supportive and non-pressuring way.\n* **Social Skills Training (adapted for young children):**  If social anxiety is confirmed, age-appropriate social skills training could be beneficial, focusing on building confidence and practicing social interactions in a safe environment.\n* **Trauma-Informed Therapy (if indicated):** If underlying trauma is identified, a trauma-informed approach would be essential to ensure a safe and supportive therapeutic environment.\n\n\n3. **Disclaimer:**\n\nThe above suggestions regarding areas of concern and potential therapy approaches are based on the limited information provided and are for consideration only.  They are not diagnoses, and a comprehensive assessment by a qualified mental health professional is necessary to determine an accurate diagnosis and develop an appropriate treatment plan for Jane Maxwell.  Further information is needed to clarify the nature and severity of her shyness and to rule out other potential contributing factors.\n",
+    "insights_generated_at": "2025-06-11T13:23:48.400971"
+  },
+  "Albert Einstein": {
+    "summary": "- **Name and age:** Albert Einstein, 45 years old\n- **Mood and sleep info:**  Reports current mood as 8 (on an unspecified scale, needs clarification), and poor sleep pattern.\n- **Main concern:**  Experiencing significant distress stemming from a belief that the world is headed towards destruction.\n- **Any crisis risk:** No immediate crisis risk reported.\n- **Any pattern in response:** The main concern expresses catastrophic thinking.  Further assessment needed to determine the severity and nature of these beliefs (delusional vs. anxiety-related, etc.). The numerical mood rating lacks context and requires clarification.\n",
+    "timestamp": "2025-06-11T13:20:57.276775",
+    "crisis_detected": false,
+    "full_intake": {
+      "name": "Albert Einstein",
+      "age": "45",
+      "phone": "543-678-1234",
+      "emergency_contact": "Nikola tesla 736-246-3467",
+      "current_mood": "8",
+      "sleep_pattern": "Poor",
+      "main_concern": "I feel like the world i sheading to destruction and thats causing me pain",
+      "crisis_check": "no"
+    },
+    "insights": "Based on the provided summary of Albert Einstein, 45 years old:\n\n\n1. **Possible Areas of Concern:**\n\n*   **Anxiety:** The distress stemming from a belief about the world's impending destruction strongly suggests significant anxiety.  This could manifest as generalized anxiety disorder or a more specific phobia.\n*   **Catastrophic Thinking:** The described pattern of thinking indicates a tendency toward catastrophic thinking, a cognitive distortion often associated with anxiety and depression.\n*   **Potential Underlying Depression:** While not explicitly stated, poor sleep patterns and significant distress could be indicative of underlying depressive symptoms.  Further investigation is needed.\n*   **Existential Concerns:**  The nature of his concern suggests potential underlying existential anxieties related to mortality, meaning, and the future.\n\n2. **Potential Therapy Approaches:**\n\n*   **Cognitive Behavioral Therapy (CBT):** CBT could be helpful in identifying and challenging the catastrophic thinking patterns contributing to his distress.  Techniques such as cognitive restructuring and behavioral experiments could be beneficial.\n*   **Acceptance and Commitment Therapy (ACT):** ACT may be useful in helping Mr. Einstein accept difficult thoughts and feelings related to his fear of global destruction while focusing on valued actions and goals.\n*   **Mindfulness-Based Therapies:** Mindfulness practices might help Mr. Einstein manage overwhelming anxiety and improve his emotional regulation skills.\n*   **Existential Therapy:** Given the nature of his concern, an existential approach may prove beneficial in exploring his values, meaning-making, and coping with the anxieties related to life's uncertainties.\n\n\n3. **Disclaimer:**\n\nIt is crucial to remember that the above are potential areas of concern and suggested therapy approaches based on limited information.  They are not diagnoses, and a comprehensive clinical assessment by a qualified mental health professional is necessary to determine a precise diagnosis and develop an appropriate treatment plan.  The information provided here is for informational purposes only and should not be considered medical advice.\n",
+    "insights_generated_at": "2025-06-11T13:23:51.221759"
+  },
+  "Marie Curie": {
+    "summary": "- **Name and age:** Marie Curie, 34 years old\n- **Mood and sleep info:** Reports current mood as a 4 (on an unspecified scale, needs clarification), and poor sleep pattern.\n- **Main concern:** Feeling overwhelmed by work.\n- **Any crisis risk:** No immediate crisis risk reported.\n- **Any pattern in responses:**  No significant patterns detected beyond the stated main concern.  Further information is needed to understand the context of the \"4\" mood rating and the nature of the \"poor\" sleep pattern.\n",
+    "timestamp": "2025-06-11T13:22:58.405028",
+    "crisis_detected": false,
+    "full_intake": {
+      "name": "Marie Curie",
+      "age": "34",
+      "phone": "435-678-2355",
+      "emergency_contact": "Pierre Curie 765-235-7833",
+      "current_mood": "4",
+      "sleep_pattern": "Poor",
+      "main_concern": "I feel overwhelmed by work",
+      "crisis_check": "no"
+    },
+    "insights": "**1. Possible Areas of Concern:**\n\n* **Burnout:** Feeling overwhelmed by work is a key symptom of burnout.\n* **Stress:**  The combination of feeling overwhelmed and poor sleep suggests significant stress.\n* **Anxiety:** While not explicitly stated, underlying anxiety could contribute to feeling overwhelmed and sleep disturbances.\n* **Depression:** A mood rating of 4 (assuming a low score indicates low mood), combined with poor sleep, warrants consideration of possible depressive symptoms, though further information is needed.\n\n\n**2. Potential Therapy Approaches:**\n\n* **Cognitive Behavioral Therapy (CBT):**  Could help identify and challenge negative thought patterns contributing to feelings of overwhelm and improve coping mechanisms for stress management.\n* **Stress Management Techniques:** Relaxation techniques, time management strategies, and work-life balance interventions could be beneficial.\n* **Mindfulness-Based Interventions:** Mindfulness practices may help reduce stress and improve sleep quality.\n* **Acceptance and Commitment Therapy (ACT):**  Could help Marie accept difficult emotions related to work and focus on valued actions despite feeling overwhelmed.\n\n\n**3. Disclaimer:**\n\nThe above are possible areas of concern and potential therapeutic approaches based on the limited information provided.  They are suggestions only and do not constitute a diagnosis. A comprehensive assessment by a qualified mental health professional is necessary to determine an accurate diagnosis and develop an appropriate treatment plan.\n",
+    "insights_generated_at": "2025-06-11T13:23:53.295703"
   }
 }
