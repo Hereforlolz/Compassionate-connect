@@ -73,5 +73,15 @@
     "name": "Jonson johnson",
     "timestamp": "2025-06-18T09:22:07.364299",
     "message": "Hi Jonson johnson, just checking in after yesterday. How are you feeling today? Would you like to schedule a session?"
+  },
+  {
+    "name": "John Watson",
+    "timestamp": "2025-06-18T09:32:40.732638",
+    "message": "Hi John Watson, just checking in after yesterday. How are you feeling today? Would you like to schedule a session?"
+  },
+  {
+    "name": "John Watson",
+    "timestamp": "2025-06-18T09:33:30.000622",
+    "message": "Hi John Watson, just checking in after yesterday. How are you feeling today? Would you like to schedule a session?"
   }
 ]
