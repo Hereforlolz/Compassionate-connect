@@ -10,6 +10,19 @@ from insight_agent import InsightAgent
 from google.cloud import firestore
 import os
 
+# === Ensure Firestore credentials are set ===
+import json
+
+# If running on Render, write the JSON env to a file
+if os.getenv("GOOGLE_APPLICATION_CREDENTIALS_JSON"):
+    with open("credentials.json", "w") as f:
+        f.write(os.getenv("GOOGLE_APPLICATION_CREDENTIALS_JSON"))
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "credentials.json"
+
+# If local and not already set, point to your file
+elif not os.getenv("GOOGLE_APPLICATION_CREDENTIALS"):
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "credentials.json"
+
 # === CONFIG ===
 PROJECT_ID = "compassionate-connect-ai"
 os.environ["GOOGLE_CLOUD_PROJECT"] = PROJECT_ID
