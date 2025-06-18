@@ -1,17 +1,13 @@
 {
   "John Doe": {
-    "summary": "- **Name and age:** John Doe, 29 years old\n- **Mood and sleep info:** Reports current mood as a 4 (on an unspecified scale, needs clarification), and poor sleep pattern.\n- **Main concern:** Feeling overwhelmed and hopeless.\n- **Any crisis risk:** No immediate crisis reported.\n- **Any pattern in response:** No significant patterns detected beyond the expressed feelings of hopelessness and overwhelm.  Further information is needed to establish a diagnostic pattern.\n",
-    "timestamp": "2025-06-11T15:20:17.418852",
+    "summary": "This patient reported moderate distress. Further attention recommended.",
+    "timestamp": "2025-06-17T18:41:49.408080",
     "crisis_detected": false,
     "full_intake": {
       "name": "John Doe",
-      "age": "29",
-      "phone": "555-123-4567",
-      "emergency_contact": "Jane Doe, 555-987-6543",
-      "current_mood": "4",
-      "sleep_pattern": "poor",
-      "main_concern": "I\u2019ve been feeling extremely overwhelmed and hopeless lately",
-      "crisis_check": "no"
+      "age": 35,
+      "distress_level": "moderate",
+      "concerns": "Feeling stressed about work-life balance."
     }
   },
   "Jane Smith": {
@@ -77,4 +73,4 @@
     "insights": "**1. Possible Areas of Concern:**\n\n* **Burnout:** Feeling overwhelmed by work is a key symptom of burnout.\n* **Stress:**  The combination of feeling overwhelmed and poor sleep suggests significant stress.\n* **Anxiety:** While not explicitly stated, underlying anxiety could contribute to feeling overwhelmed and sleep disturbances.\n* **Depression:** A mood rating of 4 (assuming a low score indicates low mood), combined with poor sleep, warrants consideration of possible depressive symptoms, though further information is needed.\n\n\n**2. Potential Therapy Approaches:**\n\n* **Cognitive Behavioral Therapy (CBT):**  Could help identify and challenge negative thought patterns contributing to feelings of overwhelm and improve coping mechanisms for stress management.\n* **Stress Management Techniques:** Relaxation techniques, time management strategies, and work-life balance interventions could be beneficial.\n* **Mindfulness-Based Interventions:** Mindfulness practices may help reduce stress and improve sleep quality.\n* **Acceptance and Commitment Therapy (ACT):**  Could help Marie accept difficult emotions related to work and focus on valued actions despite feeling overwhelmed.\n\n\n**3. Disclaimer:**\n\nThe above are possible areas of concern and potential therapeutic approaches based on the limited information provided.  They are suggestions only and do not constitute a diagnosis. A comprehensive assessment by a qualified mental health professional is necessary to determine an accurate diagnosis and develop an appropriate treatment plan.\n",
     "insights_generated_at": "2025-06-11T13:23:53.295703"
   }
-}
+}{"name": "Jonson johnson", "age": 23, "phone": "854-689-3322", "emergency_contact": "Mrs johnson", "current_mood": 7, "sleep_pattern": "Fair", "main_concern": "Feeling sad and unhappy", "crisis_check": "yes", "crisis_detected": true, "crisis_timestamp": "2025-06-18T09:22:02.891047"}

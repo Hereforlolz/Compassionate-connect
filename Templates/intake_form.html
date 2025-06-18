@@ -1,0 +1,17 @@
+<form method="post" action="/submit">
+  <label>Name: <input name="name" /></label><br/>
+  <label>Age: <input name="age" type="number" /></label><br/>
+  <label>Phone: <input name="phone" /></label><br/>
+  <label>Emergency Contact: <input name="emergency_contact" /></label><br/>
+  <label>Mood (1-10): <input name="current_mood" type="number" min="1" max="10"/></label><br/>
+  <label>Sleep Pattern: 
+    <select name="sleep_pattern">
+      <option value="Good">Good</option>
+      <option value="Fair">Fair</option>
+      <option value="Poor">Poor</option>
+    </select>
+  </label><br/>
+  <label>Main Concern: <input name="main_concern" /></label><br/>
+  <label>Crisis Check (Yes/No): <input name="crisis_check" /></label><br/>
+  <button type="submit">Submit</button>
+</form>

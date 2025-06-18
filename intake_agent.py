@@ -8,6 +8,13 @@ class IntakeQuestionnaireAgent:
     def __init__(self, project_id):
         self.project_id = project_id
         self.location = "us-central1"
+
+        # === Added this line to fix the AttributeError ===
+        api_key = os.getenv("GENAI_API_KEY")
+        if not api_key:
+            raise ValueError("GENAI_API_KEY environment variable not set")
+        genai.configure(api_key=api_key)
+
         self.model = genai.GenerativeModel("gemini-1.5-flash")
         self.patient_data = {}
         self.questions = [
@@ -212,3 +219,50 @@ class IntakeQuestionnaireAgent:
                     print(f"  {k}: {v}")
                 break
             question = result
+
+    def process_form_submission(self, form_data: dict):
+        """
+        New method to process a complete form submission in one call (for web/API use).
+        Does NOT change existing interactive CLI logic.
+        """
+
+        # 1) Store incoming form data
+        self.patient_data = form_data
+
+        # 2) Check crisis triggers
+        crisis_flagged = False
+        for q in self.questions:
+            if q.get('crisis_trigger', False):
+                response = form_data.get(q['id'], "")
+                if self.detect_crisis(response):
+                    crisis_flagged = True
+
+        # 3) Save to Firestore
+        try:
+            db = firestore.Client(project=self.project_id)
+            db.collection("intake_submissions").add(self.patient_data)
+            print("✅ Intake form saved to Firestore.")
+        except Exception as e:
+            print(f"⚠️ Firestore save error: {e}")
+
+        # 4) Save to summaries.json as record
+        try:
+            with open("summaries.json", "a") as f:
+                f.write(json.dumps(self.patient_data) + "\n")
+            print("🗂️ Saved to summaries.json.")
+        except Exception as e:
+            print(f"⚠️ Could not write to summaries.json: {e}")
+
+        # 5) Generate short text summary
+        summary = (
+            f"Patient {form_data.get('name', 'Unknown')} "
+            f"reported mood {form_data.get('current_mood', '?')}, "
+            f"sleep pattern {form_data.get('sleep_pattern', '?')}, "
+            f"and main concern: {form_data.get('main_concern', '')}."
+        )
+
+        return {
+            "summary": summary,
+            "crisis_flagged": crisis_flagged
+        }
+

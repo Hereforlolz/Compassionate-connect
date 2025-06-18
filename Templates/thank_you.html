@@ -1,0 +1,10 @@
+<h2>Thank you for submitting your intake form!</h2>
+
+<p><strong>Summary:</strong> {{ summary }}</p>
+
+{% if crisis %}
+<p style="color:red;">⚠️ Crisis detected — a response has been triggered. A professional will follow up immediately.</p>
+{% endif %}
+
+<h3>AI-Powered Suggestions:</h3>
+<pre>{{ insights }}</pre>
