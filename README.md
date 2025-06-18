@@ -48,12 +48,15 @@ It:
 🧪 Try It Out (Local CLI Demo)
 
 ```bash
-git clone https://github.com/yourusername/compassionateconnect-ai.git
-cd compassionateconnect-ai
+git clone https://github.com/Hereforlolz/compassionateconnect.git
+cd compassionateconnect
 pip install -r requirements.txt
 
 # Start the intake flow:
-python onboarding_coordinator_agent.py
+uvicorn api_main:app --reload
+
+# Open the link in the web browser and enter data to see the backend cli and the AI insights to show up after clicking submit : 
+http://127.0.0.1:8000 
 
 # View the therapist dashboard:
 python therapist_dashboard.py
@@ -86,6 +89,7 @@ The dashboard:
 * Displays client summaries
 * Shows ethically filtered Gemini-generated insights
 * Flags any crisis-detected users for immediate follow-up
+* Simulates a therapist dashboard to help summarize quickly
 
 ---
 
@@ -107,8 +111,8 @@ The dashboard:
 🧭 Project Files (Flat Structure)
 
 ```
-compassionateconnect-ai/
-├── agents/
+compassionateconnect/
+├── Templates/
 ├── intake_agent.py
 ├── crisis_response_agent.py
 ├── summary_generator_agent.py
@@ -119,6 +123,7 @@ compassionateconnect-ai/
 ├── summaries.json
 ├── follow_up_log.json
 ├── requirements.txt
+├── api_main.py
 ├── README.md
 └── LICENSE
 ```

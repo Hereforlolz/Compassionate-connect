@@ -1,8 +1,12 @@
 # crisis_response_agent.py
 import google.generativeai as genai
+import os
+
+genai.configure(api_key=os.getenv("GENAI_API_KEY"))
+
 class CrisisResponseAgent:
     def __init__(self, project_id):
-        self.model = genai.GenerativeModel("gemini-1.5-flash")
+        self.model = genai.GenerativeModel(model_name="gemini-1.5-flash")
 
     def handle_crisis(self, user_input):
         prompt = f"""
