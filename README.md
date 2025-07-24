@@ -54,7 +54,7 @@ You'll experience a fully guided, AI-powered intake simulation — with clarific
 - 💬 Command-line interface
 
 ## 📺 Demo Video
-[Your demo video link here]
+https://www.youtube.com/watch?v=exSmOzVHLIg&ab_channel=SreenidhiVedartham%28Needhi%29
 
 ## 🧾 Therapist Dashboard
 The dashboard:
