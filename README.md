@@ -79,13 +79,6 @@ python therapist_dashboard.py
 
 ---
 
-## Demo
-
-📺 [Watch the demo](https://www.youtube.com/watch?v=exSmOzVHLIg)  
-📘 [Notion project doc](https://www.notion.so/CompassionateConnect-AI-20eb2f6a587d809194b4dfadbf393ebb)
-
----
-
 ## What I'd Do Differently
 
 **Agent boundaries were too loose.** The 
