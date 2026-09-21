@@ -124,6 +124,6 @@ match (`python eval/run_eval.py`; 40 synthetic, author-labelled cases; recall
 └── coordinator_agent.py, followup_agent.py   unused experiments
 ```
 
-**License:** none specified yet (the earlier README said MIT, but no LICENSE file was ever added).
+**License:** [MIT](LICENSE). Covers the code only; this is not a clinical product and comes with no warranty.
 
 Follow-on prototype: [Therapist-Dashboard-AWS](https://github.com/Hereforlolz/Therapist-Dashboard-AWS).
