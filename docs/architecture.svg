@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 840" width="1100" height="840" font-family="Segoe UI, Arial, sans-serif">
+<title>CompassionateConnect AI - architecture as implemented</title>
+<desc>Two entry paths (web and CLI), which steps use an LLM, which parts are simulated, and where human review is intended but not implemented.</desc>
+<defs><marker id="ar" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="#555"/></marker></defs>
+<style>
+.t{font-size:12.5px;fill:#1f2933}.b{font-size:13px;font-weight:700;fill:#111}.h{font-size:20px;font-weight:700;fill:#111}.s{font-size:12px;fill:#52606d}
+.rule{fill:#e8f0fe;stroke:#3b6fd4;stroke-width:1.5}.llm{fill:#f1e8fd;stroke:#7a4cc2;stroke-width:1.5}
+.sim{fill:#fff3e0;stroke:#d9822b;stroke-width:1.8;stroke-dasharray:6 4}.hum{fill:#e6f4ea;stroke:#2e8b57;stroke-width:1.8;stroke-dasharray:2 3}
+.ln{stroke:#555;stroke-width:1.5;fill:none}
+</style>
+<rect width="1100" height="840" fill="#ffffff"/>
+<text x="30" y="34" class="h">CompassionateConnect AI: what the code actually does</text>
+<text x="30" y="54" class="s">Hackathon prototype, synthetic data only. Derived from the source, not from the original concept diagram.</text>
+<rect x="30" y="68" width="22" height="16" rx="3" class="rule"/><text x="60" y="81" class="s">Rule-based code</text>
+<rect x="220" y="68" width="22" height="16" rx="3" class="llm"/><text x="250" y="81" class="s">Gemini LLM call</text>
+<rect x="410" y="68" width="22" height="16" rx="3" class="sim"/><text x="440" y="81" class="s">Simulated / not implemented</text>
+<rect x="665" y="68" width="22" height="16" rx="3" class="hum"/><text x="695" y="81" class="s">Human review: intended, not built</text>
+<text x="30" y="108" class="b" style="font-size:15px">WEB PATH  (api_main.py, FastAPI)</text>
+<text x="570" y="108" class="b" style="font-size:15px">CLI PATH  (main.py / onboarding coordinator)</text>
+<rect x="30" y="130" width="490" height="62" rx="8" class="rule"/>
+<text x="42" y="152" class="b">1  Browser form (templates/intake_form.html)</text>
+<text x="42" y="170" class="t">8 fields, including free-text "main concern"</text>
+<rect x="30" y="220" width="490" height="90" rx="8" class="rule"/>
+<text x="42" y="242" class="b">2  POST /submit -&gt; IntakeQuestionnaireAgent</text>
+<text x="42" y="260" class="t">Keyword check on the "crisis_check" field only</text>
+<text x="42" y="278" class="t">Summary is an f-string template (no LLM)</text>
+<text x="42" y="296" class="t">Saves to Firestore (try/except) + summaries.json</text>
+<line x1="275" y1="192" x2="275" y2="220" class="ln" marker-end="url(#ar)"/>
+<rect x="30" y="338" width="490" height="80" rx="8" class="sim"/>
+<text x="42" y="360" class="b">3  If flagged: CrisisResponseAgent (Gemini)</text>
+<text x="42" y="378" class="t">Writes a supportive reply pointing to 988</text>
+<text x="42" y="396" class="t">Printed to the server console, not shown to patient</text>
+<text x="42" y="414" class="t">"Alert to clinic staff" is a print statement</text>
+<line x1="275" y1="310" x2="275" y2="338" class="ln" marker-end="url(#ar)"/>
+<rect x="30" y="446" width="490" height="62" rx="8" class="llm"/>
+<text x="42" y="468" class="b">4  InsightAgent (Gemini), runs for EVERY submission</text>
+<text x="42" y="486" class="t">Non-diagnostic suggestions + disclaimer</text>
+<line x1="275" y1="418" x2="275" y2="446" class="ln" marker-end="url(#ar)"/>
+<rect x="30" y="536" width="490" height="62" rx="8" class="rule"/>
+<text x="42" y="558" class="b">5  thank_you.html</text>
+<text x="42" y="576" class="t">Shows summary, insights, crisis banner (promises follow-up)</text>
+<line x1="275" y1="508" x2="275" y2="536" class="ln" marker-end="url(#ar)"/>
+<rect x="570" y="130" width="500" height="62" rx="8" class="rule"/>
+<text x="582" y="152" class="b">1  OnboardingCoordinatorAgent (CLI only)</text>
+<text x="582" y="170" class="t">Sequences the agents, no LLM</text>
+<rect x="570" y="220" width="500" height="90" rx="8" class="rule"/>
+<text x="582" y="242" class="b">2  IntakeQuestionnaireAgent</text>
+<text x="582" y="260" class="t">8 questions, rule-based validation</text>
+<text x="582" y="278" class="t">Gemini only writes clarification text</text>
+<text x="582" y="296" class="t">Keyword check on the "crisis_check" answer</text>
+<line x1="820" y1="192" x2="820" y2="220" class="ln" marker-end="url(#ar)"/>
+<rect x="570" y="338" width="500" height="90" rx="8" class="sim"/>
+<text x="582" y="360" class="b">3a  Crisis path: CrisisResponseAgent + logs</text>
+<text x="582" y="378" class="t">Firestore crisis flags/profiles + follow_up_log.json</text>
+<text x="582" y="396" class="t">Follow-up text is a fixed template; nothing is sent</text>
+<text x="582" y="414" class="t">Flow stops here: no summary is generated</text>
+<rect x="570" y="438" width="500" height="62" rx="8" class="rule"/>
+<text x="582" y="460" class="b">3b  Completed intake: patient confirms / edits answers</text>
+<text x="582" y="478" class="t">Then DataPersistenceAgent saves the record</text>
+<rect x="570" y="526" width="500" height="62" rx="8" class="llm"/>
+<text x="582" y="548" class="b">4  SummaryGeneratorAgent (Gemini)</text>
+<text x="582" y="566" class="t">Brief saved to summaries.json + Firestore</text>
+<line x1="690" y1="310" x2="690" y2="338" class="ln" marker-end="url(#ar)"/>
+<text x="698" y="329" class="s">crisis</text>
+<path d="M1070,270 L1086,270 L1086,469 L1072,469" class="ln" marker-end="url(#ar)"/>
+<text transform="translate(1097,370) rotate(-90)" class="s" text-anchor="middle">completed</text>
+<line x1="820" y1="500" x2="820" y2="526" class="ln" marker-end="url(#ar)"/>
+<rect x="30" y="632" width="1040" height="84" rx="8" class="rule"/>
+<text x="42" y="654" class="b">Therapist dashboard  (python therapist_dashboard.py)</text>
+<text x="42" y="672" class="t">Prints stored summaries; asks Gemini for insights if missing</text>
+<text x="42" y="690" class="t">Does NOT display the crisis flag, and reads a different summaries.json format than the web path writes</text>
+<line x1="275" y1="598" x2="275" y2="632" class="ln" marker-end="url(#ar)"/>
+<line x1="820" y1="588" x2="820" y2="632" class="ln" marker-end="url(#ar)"/>
+<rect x="30" y="740" width="1040" height="70" rx="8" class="hum"/>
+<text x="42" y="762" class="b">Clinician review: design intent only</text>
+<text x="42" y="780" class="t">Every crisis flag, summary and insight is meant to be reviewed by a clinician. No queue, alerting, SLA, or audit trail is implemented.</text>
+<line x1="550" y1="716" x2="550" y2="740" class="ln" marker-end="url(#ar)"/>
+</svg>

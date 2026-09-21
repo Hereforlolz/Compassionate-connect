@@ -1,124 +1,127 @@
 # CompassionateConnect AI
-**Multi-Agent Mental Health Intake System**
+**A multi-agent prototype for mental-health clinic intake**
 
-*Built for the Google Cloud Multi-Agent Hackathon · 
-June 2025 · Status: Archived / Demo Only*
+*Built for the Google Cloud Multi-Agent Hackathon · June 2025*
+
+> **Status: archived hackathon demo. Not a clinical system.**
+> All data in this repo is synthetic. It has never been used with real
+> patients, is not HIPAA-compliant, has not been clinically validated, and its
+> crisis check is a keyword match, not a risk assessment. Anything crisis-related
+> or sensitive must be reviewed by a human clinician.
+> The original cloud resources (Firestore project, hosted demo) have been shut down.
+
+**Read first:** [Case study](docs/case-study.md) · [Architecture diagram](docs/architecture.svg)
 
 ---
 
 ## The Problem
 
-Mental health clinics are overwhelmed with intake 
-admin work. Patients feel unseen, crisis moments go 
-unnoticed, and clinicians don't get usable summaries 
-before sessions.
-
-CompassionateConnect reimagines that intake process 
-using a multi-agent conversational AI system — so 
-clinicians spend less time on paperwork and more 
-time with patients.
+Mental health clinics carry heavy intake admin. Crisis signals can be missed,
+and clinicians often start a session without a usable summary. The hackathon
+question: can a set of small, specialised agents handle intake so clinicians
+spend their time on patients?
 
 ---
 
-## What It Does
+## What Is Actually Implemented
 
-Six agents handle the full intake flow:
+There are two entry points, and they do **not** run the same agents.
 
-| Agent | Role |
-|-------|------|
-| OnboardingCoordinatorAgent | Orchestrates the full flow |
-| IntakeQuestionnaireAgent | Asks, validates, clarifies patient responses in real time |
-| CrisisResponseAgent | Detects crisis indicators, logs high-priority cases |
-| SummaryGeneratorAgent | Converts responses into therapist-friendly briefs |
-| InsightAgent | Suggests possible therapy directions (non-diagnostic) |
-| DataPersistenceAgent | Saves to Firestore and local JSON |
+| Component | What it does | LLM? | Runs in |
+|-----------|--------------|------|---------|
+| `IntakeQuestionnaireAgent` | Asks 8 questions, validates answers with rules, checks the `crisis_check` answer against a keyword list | Gemini only writes clarification text | CLI + web |
+| `CrisisResponseAgent` | Writes a short supportive message pointing to 988; falls back to fixed 911 text | Yes | CLI + web |
+| `InsightAgent` | Suggests possible therapy directions with a "not a diagnosis" disclaimer | Yes | CLI + web + dashboard |
+| `SummaryGeneratorAgent` | Turns intake data into a clinician-facing brief | Yes | CLI only |
+| `DataPersistenceAgent` | Writes to Firestore and `summaries.json` | No | CLI only |
+| `OnboardingCoordinatorAgent` | Sequences the agents above | No | CLI only |
 
-Each agent operates independently with a defined 
-input/output contract — the coordinator sequences 
-them and handles exceptions.
+The web path (`api_main.py`) builds its summary from a plain string template and
+skips the coordinator, summary and persistence agents.
+
+`coordinator_agent.py` and `followup_agent.py` are unused early experiments
+(Vertex AI, `chat-bison`).
+
+**Simulated or not implemented:** staff alerting (a `print` statement), sending
+follow-up messages (a template is logged, nothing is sent), and crisis flags in
+the therapist dashboard (it does not display them).
+
+See the [case study](docs/case-study.md) for known gaps and what a real
+version would require.
 
 ---
 
-## Ethical AI Design
+## Human-Review Design
 
-This was a design constraint, not an afterthought:
-
-- No diagnoses — AI surfaces directions for 
-  therapists to evaluate, not conclusions
-- Clear disclaimers embedded in every AI insight
-- Simulated patient data only — no real PHI at 
-  any stage
-- Built to augment clinicians, not replace them
+- Insights are framed as suggestions for a therapist, never diagnoses, and carry a disclaimer.
+- In the CLI flow the patient confirms or edits their answers before anything is saved.
+- Crisis-related output is intended to go to a clinician. **No queue, alerting, or audit trail exists in this code.**
 
 ---
 
 ## Tech Stack
 
-- Gemini 1.5 Flash (via `google.generativeai`)
-- Firestore for real-time clinician-side storage
-- FastAPI + Uvicorn
-- Python multi-agent architecture
-- Local JSON for offline demo and backup
+- Gemini via `google.generativeai` (code targets `gemini-1.5-flash`; that model name may need updating)
+- Firestore (optional; failures are caught and the app continues)
+- FastAPI + Uvicorn + Jinja2
+- Local JSON files
 
 ---
 
-## Try It Locally
+## Running It Locally
+
+Not currently turnkey. Known blockers:
+
+- `intake_agent.py` requires `GENAI_API_KEY`; `summary_generator_agent.py` requires `GOOGLE_API_KEY`; `insight_agent.py` has a hardcoded `"YOUR_KEY"` placeholder to replace.
+- Model names may need updating, and a Gemini key is required for any LLM output.
+- Firestore is not needed to start the web app, but writes fail with a logged warning.
+- The web path appends one JSON object per line to `summaries.json`, while the dashboard expects a single JSON object keyed by name.
+- There are no automated tests; `test*.py` and `demo_script.py` are manual scripts.
 
 ```bash
-git clone https://github.com/Hereforlolz/compassionateconnect.git
-cd compassionateconnect
+git clone https://github.com/Hereforlolz/Compassionate-connect.git
+cd Compassionate-connect
 pip install -r requirements.txt
-
-# Start the intake flow:
-uvicorn api_main:app --reload
-# Open: http://127.0.0.1:8000
-
-# View therapist dashboard:
-python therapist_dashboard.py
+export GENAI_API_KEY=...  GOOGLE_API_KEY=...   # your own keys
+uvicorn api_main:app --reload                   # http://127.0.0.1:8000
+python therapist_dashboard.py                   # reads summaries.json
 ```
 
 ---
 
 ## What I'd Do Differently
 
-**Agent boundaries were too loose.** The 
-CrisisResponseAgent and SummaryGeneratorAgent shared 
-state in ways that created ordering dependencies. 
-In a production system I'd enforce stricter 
-input/output contracts and add a message bus rather 
-than direct agent-to-agent calls.
+**Agent boundaries were too loose.** The crisis and summary steps shared state,
+which created ordering dependencies. A production design would enforce input and
+output contracts and route through a message bus instead of direct calls.
 
-**Gemini prompt tuning was underinvested.** The 
-IntakeAgent clarifications sometimes felt clinical 
-rather than conversational — the prompt needed more 
-iteration than the hackathon timeline allowed.
+**Prompt tuning was underinvested.** Clarifications sometimes read as clinical
+rather than conversational.
 
-**No eval harness.** I tracked whether the system 
-ran, not whether the outputs were actually good. 
-A real deployment would need structured evaluation 
-of summary quality and crisis detection accuracy 
+**No eval harness.** I tracked whether the system ran, not whether its output
+was good. Crisis detection and summary quality would need structured evaluation
 before any clinical use.
 
 ---
 
-## Project Files
+## Files
 
 ```
-compassionateconnect/
-├── Templates/
-├── intake_agent.py
+├── api_main.py                      web entry point (FastAPI)
+├── main.py, demo_script.py          CLI entry points
+├── onboarding_coordinator_agent.py  CLI orchestration
+├── intake_agent.py                  questions, validation, crisis keywords
 ├── crisis_response_agent.py
 ├── summary_generator_agent.py
 ├── insight_agent.py
 ├── data_persistence_agent.py
-├── onboarding_coordinator_agent.py
-├── therapist_dashboard.py
-├── api_main.py
-├── requirements.txt
-├── summaries.json
-├── follow_up_log.json
-└── README.md
+├── therapist_dashboard.py           CLI dashboard over summaries.json
+├── templates/                       intake form and thank-you page
+├── docs/                            case study and architecture diagram
+├── summaries.json, follow_up_log.json   synthetic sample data
+└── coordinator_agent.py, followup_agent.py   unused experiments
 ```
 
-*MIT License · Part of a broader exploration of 
-AI systems for underserved healthcare contexts.*
+**License:** none specified yet (the earlier README said MIT, but no LICENSE file was ever added).
+
+Follow-on prototype: [Therapist-Dashboard-AWS](https://github.com/Hereforlolz/Therapist-Dashboard-AWS).
