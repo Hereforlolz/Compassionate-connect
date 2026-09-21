@@ -10,7 +10,7 @@
 > or sensitive must be reviewed by a human clinician.
 > The original cloud resources (Firestore project, hosted demo) have been shut down.
 
-**Read first:** [Case study](docs/case-study.md) · [Architecture diagram](docs/architecture.svg)
+**Read first:** [Case study](docs/case-study.md) · [Architecture diagram](docs/architecture.svg) · [Crisis-check evaluation](eval/results.md)
 
 ---
 
@@ -98,9 +98,10 @@ output contracts and route through a message bus instead of direct calls.
 **Prompt tuning was underinvested.** Clarifications sometimes read as clinical
 rather than conversational.
 
-**No eval harness.** I tracked whether the system ran, not whether its output
-was good. Crisis detection and summary quality would need structured evaluation
-before any clinical use.
+**No eval harness at the time.** I tracked whether the system ran, not whether
+its output was good. I have since added a mock-mode check of the crisis keyword
+match (`python eval/run_eval.py`; 40 synthetic, author-labelled cases; recall
+0.52). Summary quality is still unevaluated, and none of this is clinical validation.
 
 ---
 
@@ -118,6 +119,7 @@ before any clinical use.
 ├── therapist_dashboard.py           CLI dashboard over summaries.json
 ├── templates/                       intake form and thank-you page
 ├── docs/                            case study and architecture diagram
+├── eval/                            synthetic crisis-check cases, runner, results
 ├── summaries.json, follow_up_log.json   synthetic sample data
 └── coordinator_agent.py, followup_agent.py   unused experiments
 ```

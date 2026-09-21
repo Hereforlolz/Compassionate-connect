@@ -74,26 +74,46 @@ point of this case study.
 3. **The dashboard ignores crisis.** `therapist_dashboard.py` never reads the crisis flag.
 4. **The two entry points diverge.** The web path skips the coordinator, summary and persistence agents and uses a string template for its summary. It also writes `summaries.json` in a different format than the dashboard reads.
 5. **Configuration is inconsistent.** Two different API-key variable names are required, one file hardcodes a placeholder, and no example env file exists.
-6. **There are no automated tests and no evaluation.** Only manual scripts, one of which would crash.
+6. **There were no automated tests and no evaluation** before this review. Only manual scripts, one of which would crash. I have since added the crisis-check harness in `eval/`.
 7. **Early public messaging overclaimed.** Early README versions called the system "production-ready" and "HIPAA-compliant". Neither was true and I have removed those claims. They remain visible in old commits.
 
 ## 6. What I'd change (in priority order)
 
 1. **Crisis routing that fails safe.** Screen all free text; treat any uncertainty as "needs human review"; keep a human-approved fixed message for the patient; make the clinician-facing flag impossible to miss.
-2. **An evaluation harness before anything else.** A labelled set of synthetic cases, with crisis recall as the headline metric, and a summary-fidelity check against the raw intake.
+2. **Grow the evaluation harness** (crisis screening is done, section 7): clinician-reviewed labels, a summary-fidelity check against the raw intake, and a regression gate in CI.
 3. **Explicit agent contracts.** Typed input/output schemas per agent (for example with Pydantic), one orchestration path shared by web and CLI, and a queue for handoffs.
 4. **A single source of truth for storage** and an audit log of who saw what.
 5. **Operational basics:** config via environment, `.env.example`, a working test suite, CI, and pinned model versions.
 
-## 7. Evaluation plan (proposed, **not yet run**)
+## 7. Evaluation: crisis check run, summaries and insights not yet
 
-| Question | Method | Pass bar (to be agreed with a clinician) |
-|----------|--------|------------------------------------------|
-| Does crisis screening catch risk language? | ~30 synthetic phrases spanning explicit, indirect, negated and irrelevant, scored against the current detector and any replacement | Recall on true-risk cases is the priority; false positives are acceptable because a human reviews them |
-| Are summaries faithful? | Compare each summary field to the source intake; count omissions and inventions | Zero invented facts |
-| Are insights safe? | Scan for diagnostic language | Zero diagnostic statements |
+I built a small mock-mode harness (`eval/run_eval.py`) that runs 40 synthetic
+intake forms through the repo's real `process_form_submission`, with the Gemini
+and Firestore SDKs stubbed out. It is deterministic and needs no keys, network
+or spend. Full tables: [`eval/results.md`](../eval/results.md).
 
-Results are intentionally absent: I have not run these yet.
+**Caveat first:** the cases are phrases I wrote and the labels are my own
+judgement. No clinician reviewed them. This is a development set that exposes
+gaps, not a validation study. "Positive" means "route to a human"; uncertain or
+declined answers are labelled positive on purpose.
+
+| Metric (current detector) | Result |
+|---------------------------|--------|
+| Recall on risk cases | 12/23 = 0.52 |
+| Precision | 12/18 = 0.67 |
+| False-positive rate | 6/17 = 0.35 |
+| Risk cases flagged only via the letter `y` inside another word | 5 of the 12 flagged |
+| False alarms caused only by `y` inside another word | 3 of 6 |
+| Risk stated only in `main_concern` | 0/5 caught |
+
+Recall is 0.30 if the accidental `y` matches are not credited, and 0.50 if the
+ambiguous cases are dropped, so the headline is not an artefact of my labelling
+choices. Explicit terms and a plain "yes" were caught; indirect wording,
+misspellings, non-English answers and anything outside `crisis_check` were not.
+
+Not yet evaluated: summary fidelity against the source intake, and insight
+safety (no diagnostic language). Those need LLM output and would be scored the
+same way, with a clinician agreeing the pass bar.
 
 ## 8. If this were a real program
 
