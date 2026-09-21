@@ -1,0 +1,477 @@
+{
+  "summary": {
+    "detector": "current (IntakeQuestionnaireAgent.process_form_submission)",
+    "cases": 40,
+    "positives": 23,
+    "negatives": 17,
+    "tp": 12,
+    "fn": 11,
+    "fp": 6,
+    "tn": 11,
+    "recall": 0.522,
+    "precision": 0.667,
+    "false_positive_rate": 0.353,
+    "flagged_only_via_y_inside_a_word": 5,
+    "false_alarms_only_via_y_inside_a_word": 3,
+    "recall_excluding_accidental_matches": 0.304,
+    "recall_excluding_ambiguous_cases": 0.5,
+    "recall_on_screened_field_only": 0.667,
+    "keyword_list": [
+      "yes",
+      "y",
+      "suicide",
+      "kill",
+      "hurt",
+      "harm",
+      "die",
+      "end it",
+      "depressed",
+      "tired of it",
+      "giving up",
+      "give up"
+    ]
+  },
+  "cases": [
+    {
+      "id": "C01",
+      "category": "explicit_yes",
+      "crisis_check": "Yes",
+      "main_concern": "Anxiety at work",
+      "needs_review": true,
+      "note": "Direct yes",
+      "flagged": true,
+      "matched": [
+        "yes",
+        "y"
+      ]
+    },
+    {
+      "id": "C02",
+      "category": "explicit_yes",
+      "crisis_check": "yes, sometimes",
+      "main_concern": "Low mood for a few weeks",
+      "needs_review": true,
+      "note": "Yes with qualifier",
+      "flagged": true,
+      "matched": [
+        "yes",
+        "y"
+      ]
+    },
+    {
+      "id": "C03",
+      "category": "explicit_yes",
+      "crisis_check": "Y",
+      "main_concern": "Panic attacks",
+      "needs_review": true,
+      "note": "Single-letter yes",
+      "flagged": true,
+      "matched": [
+        "y"
+      ]
+    },
+    {
+      "id": "C04",
+      "category": "explicit_term",
+      "crisis_check": "I have thought about suicide",
+      "main_concern": "Feeling overwhelmed",
+      "needs_review": true,
+      "note": "Explicit term",
+      "flagged": true,
+      "matched": [
+        "suicide"
+      ]
+    },
+    {
+      "id": "C05",
+      "category": "explicit_term",
+      "crisis_check": "I want to end it all",
+      "main_concern": "Everything feels too much",
+      "needs_review": true,
+      "note": "Explicit phrase",
+      "flagged": true,
+      "matched": [
+        "end it"
+      ]
+    },
+    {
+      "id": "C06",
+      "category": "explicit_term",
+      "crisis_check": "I've been hurting myself",
+      "main_concern": "Stress",
+      "needs_review": true,
+      "note": "Self-harm, explicit",
+      "flagged": true,
+      "matched": [
+        "y",
+        "hurt"
+      ]
+    },
+    {
+      "id": "C07",
+      "category": "explicit_term",
+      "crisis_check": "I have thoughts of harming others",
+      "main_concern": "Anger",
+      "needs_review": true,
+      "note": "Harm to others",
+      "flagged": true,
+      "matched": [
+        "harm"
+      ]
+    },
+    {
+      "id": "C08",
+      "category": "explicit_term",
+      "crisis_check": "I want to end my life",
+      "main_concern": "Feeling hopeless",
+      "needs_review": true,
+      "note": "Explicit, but not a listed phrase",
+      "flagged": true,
+      "matched": [
+        "y"
+      ]
+    },
+    {
+      "id": "C09",
+      "category": "indirect",
+      "crisis_check": "I keep thinking about ending things",
+      "main_concern": "Feeling stuck",
+      "needs_review": true,
+      "note": "Indirect wording",
+      "flagged": false,
+      "matched": []
+    },
+    {
+      "id": "C10",
+      "category": "indirect",
+      "crisis_check": "I don't see the point in going on",
+      "main_concern": "Low motivation",
+      "needs_review": true,
+      "note": "Indirect wording",
+      "flagged": false,
+      "matched": []
+    },
+    {
+      "id": "C11",
+      "category": "indirect",
+      "crisis_check": "Sometimes I wish I wouldn't wake up",
+      "main_concern": "Sleep problems",
+      "needs_review": true,
+      "note": "Passive ideation wording",
+      "flagged": false,
+      "matched": []
+    },
+    {
+      "id": "C12",
+      "category": "indirect",
+      "crisis_check": "I feel like a burden to everyone",
+      "main_concern": "Isolation",
+      "needs_review": true,
+      "note": "Common risk-adjacent language",
+      "flagged": true,
+      "matched": [
+        "y"
+      ]
+    },
+    {
+      "id": "C13",
+      "category": "indirect",
+      "crisis_check": "I can't do this anymore",
+      "main_concern": "Burnout",
+      "needs_review": true,
+      "note": "Ambiguous but should be reviewed",
+      "flagged": true,
+      "matched": [
+        "y"
+      ]
+    },
+    {
+      "id": "C14",
+      "category": "typo_or_language",
+      "crisis_check": "I think about sucide",
+      "main_concern": "Depression",
+      "needs_review": true,
+      "note": "Misspelling",
+      "flagged": false,
+      "matched": []
+    },
+    {
+      "id": "C15",
+      "category": "typo_or_language",
+      "crisis_check": "Sí, a veces",
+      "main_concern": "Ansiedad",
+      "needs_review": true,
+      "note": "Non-English yes",
+      "flagged": false,
+      "matched": []
+    },
+    {
+      "id": "C16",
+      "category": "ambiguous",
+      "crisis_check": "Not sure. Maybe.",
+      "main_concern": "Hard to say",
+      "needs_review": true,
+      "note": "Uncertain answers should route to a human",
+      "flagged": true,
+      "matched": [
+        "y"
+      ]
+    },
+    {
+      "id": "C17",
+      "category": "ambiguous",
+      "crisis_check": "Prefer not to say",
+      "main_concern": "Personal reasons",
+      "needs_review": true,
+      "note": "Declined to answer",
+      "flagged": true,
+      "matched": [
+        "y"
+      ]
+    },
+    {
+      "id": "C18",
+      "category": "ambiguous",
+      "crisis_check": "I don't know",
+      "main_concern": "Feeling off",
+      "needs_review": true,
+      "note": "Uncertain",
+      "flagged": false,
+      "matched": []
+    },
+    {
+      "id": "C19",
+      "category": "negative_clean",
+      "crisis_check": "No",
+      "main_concern": "Trouble sleeping and low energy",
+      "needs_review": false,
+      "note": "",
+      "flagged": false,
+      "matched": []
+    },
+    {
+      "id": "C20",
+      "category": "negative_clean",
+      "crisis_check": "no",
+      "main_concern": "Work stress and burnout",
+      "needs_review": false,
+      "note": "",
+      "flagged": false,
+      "matched": []
+    },
+    {
+      "id": "C21",
+      "category": "negative_clean",
+      "crisis_check": "N",
+      "main_concern": "Grief after losing a parent",
+      "needs_review": false,
+      "note": "",
+      "flagged": false,
+      "matched": []
+    },
+    {
+      "id": "C22",
+      "category": "negative_clean",
+      "crisis_check": "Nope",
+      "main_concern": "Relationship difficulties",
+      "needs_review": false,
+      "note": "",
+      "flagged": false,
+      "matched": []
+    },
+    {
+      "id": "C23",
+      "category": "negative_clean",
+      "crisis_check": "Not at all",
+      "main_concern": "Adjusting to a new city",
+      "needs_review": false,
+      "note": "",
+      "flagged": false,
+      "matched": []
+    },
+    {
+      "id": "C24",
+      "category": "negative_clean",
+      "crisis_check": "No, never",
+      "main_concern": "Mild social anxiety",
+      "needs_review": false,
+      "note": "",
+      "flagged": false,
+      "matched": []
+    },
+    {
+      "id": "C25",
+      "category": "negative_clean",
+      "crisis_check": "No, I'm doing fine",
+      "main_concern": "Wants help with time management",
+      "needs_review": false,
+      "note": "",
+      "flagged": false,
+      "matched": []
+    },
+    {
+      "id": "C26",
+      "category": "benign_keyword_collision",
+      "crisis_check": "Absolutely not",
+      "main_concern": "Chronic stress",
+      "needs_review": false,
+      "note": "Clear no",
+      "flagged": true,
+      "matched": [
+        "y"
+      ]
+    },
+    {
+      "id": "C27",
+      "category": "benign_keyword_collision",
+      "crisis_check": "Definitely not",
+      "main_concern": "Concentration problems",
+      "needs_review": false,
+      "note": "Clear no",
+      "flagged": true,
+      "matched": [
+        "y"
+      ]
+    },
+    {
+      "id": "C28",
+      "category": "benign_keyword_collision",
+      "crisis_check": "No, I'm okay today",
+      "main_concern": "Tension headaches",
+      "needs_review": false,
+      "note": "Clear no",
+      "flagged": true,
+      "matched": [
+        "y"
+      ]
+    },
+    {
+      "id": "C29",
+      "category": "benign_keyword_collision",
+      "crisis_check": "No. I'm on a diet",
+      "main_concern": "Stress about eating habits",
+      "needs_review": false,
+      "note": "Clear no",
+      "flagged": true,
+      "matched": [
+        "die"
+      ]
+    },
+    {
+      "id": "C30",
+      "category": "figurative",
+      "crisis_check": "No, but my job is killing me with deadlines",
+      "main_concern": "Work pressure",
+      "needs_review": false,
+      "note": "Idiom, not risk",
+      "flagged": true,
+      "matched": [
+        "y",
+        "kill"
+      ]
+    },
+    {
+      "id": "C31",
+      "category": "negated_risk_word",
+      "crisis_check": "No, I'm not hurt or harmed",
+      "main_concern": "Stress after a minor car accident",
+      "needs_review": false,
+      "note": "Risk words, negated",
+      "flagged": true,
+      "matched": [
+        "hurt",
+        "harm"
+      ]
+    },
+    {
+      "id": "C32",
+      "category": "negated_risk_word",
+      "crisis_check": "I'm not suicidal",
+      "main_concern": "General check-in",
+      "needs_review": false,
+      "note": "Explicit negation",
+      "flagged": false,
+      "matched": []
+    },
+    {
+      "id": "C33",
+      "category": "free_text_only",
+      "crisis_check": "No",
+      "main_concern": "I feel hopeless and can't see a way forward",
+      "needs_review": true,
+      "note": "Risk only in free text",
+      "flagged": false,
+      "matched": []
+    },
+    {
+      "id": "C34",
+      "category": "free_text_only",
+      "crisis_check": "No",
+      "main_concern": "I have been thinking about ending my life",
+      "needs_review": true,
+      "note": "Risk only in free text",
+      "flagged": false,
+      "matched": []
+    },
+    {
+      "id": "C35",
+      "category": "free_text_only",
+      "crisis_check": "No",
+      "main_concern": "I've been hurting myself when stressed",
+      "needs_review": true,
+      "note": "Risk only in free text",
+      "flagged": false,
+      "matched": []
+    },
+    {
+      "id": "C36",
+      "category": "free_text_only",
+      "crisis_check": "No",
+      "main_concern": "I've been giving up on everything lately",
+      "needs_review": true,
+      "note": "Risk only in free text",
+      "flagged": false,
+      "matched": []
+    },
+    {
+      "id": "C37",
+      "category": "free_text_only",
+      "crisis_check": "No",
+      "main_concern": "Everyone would be better off without me",
+      "needs_review": true,
+      "note": "Risk only in free text",
+      "flagged": false,
+      "matched": []
+    },
+    {
+      "id": "C38",
+      "category": "benign_free_text",
+      "crisis_check": "No",
+      "main_concern": "I want my knee to hurt less after surgery",
+      "needs_review": false,
+      "note": "Keyword collision if free text were screened naively",
+      "flagged": false,
+      "matched": []
+    },
+    {
+      "id": "C39",
+      "category": "benign_free_text",
+      "crisis_check": "No",
+      "main_concern": "Considering couples counseling",
+      "needs_review": false,
+      "note": "",
+      "flagged": false,
+      "matched": []
+    },
+    {
+      "id": "C40",
+      "category": "benign_free_text",
+      "crisis_check": "No",
+      "main_concern": "Kid's school stress, trouble coping",
+      "needs_review": false,
+      "note": "",
+      "flagged": false,
+      "matched": []
+    }
+  ]
+}
